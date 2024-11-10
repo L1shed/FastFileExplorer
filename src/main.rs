@@ -36,7 +36,7 @@ impl Filter {
             if part.starts_with('@') {
                 match part {
                     "@file" => filter.is_file = Some(true),
-                    "@dir" => filter.is_file = Some(false),
+                    "@dir" | "@folder" => filter.is_file = Some(false),
                     _ if part.starts_with("@ext:") => {
                         filter.extension = part[5..].to_string().into();
                     }
@@ -159,7 +159,7 @@ fn run_repl(explorer: &FileExplorer) -> io::Result<()> {
 fn main() -> io::Result<()> {
     println!("Building file index...");
     let mut explorer = FileExplorer::new();
-    explorer.build_from_path(".")?;
+    explorer.build_from_path("C:/")?;
     println!("File index built successfully!");
     
     println!("\nWelcome to Fast File Explorer!");

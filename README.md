@@ -10,7 +10,7 @@ Introducing Fast File Explorer, a lighting-fast file explorer with filters to ma
 2. Run `file-explorer.exe`
 3. Type your file or folder name you are searching
 4. (Optional) Use filters like:
-    - `@dir` for Directories only (also works for `@file`)
+    - `@dir` or `@folder` for Directories only (also works for `@file`)
     - `@ext:pdf` for PDF files
     - `@size>1mb` or `@size<9kb` for specifying file size
     - `@date:2023` for files with a specific last modified date

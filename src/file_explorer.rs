@@ -20,10 +20,32 @@ impl FileExplorer {
     }
 
     fn traverse_directory<P: AsRef<Path>>(&mut self, path: P) -> std::io::Result<()> {
-        for entry in fs::read_dir(path)? {
-            let entry = entry?;
+        let path_clone = path.as_ref().to_path_buf();
+        let read_dir = match fs::read_dir(path) {
+            Ok(dir) => dir,
+            Err(e) => {
+                eprintln!("Error accessing directory with path {}: {}", path_clone.display(), e);
+                return Ok(());
+            }
+        };
+
+        for entry in read_dir {
+            let entry = match entry {
+                Ok(e) => e,
+                Err(e) => {
+                    eprintln!("Error accessing entry: {}", e);
+                    continue;
+                }
+            };
+
             let path = entry.path();
-            let metadata = entry.metadata()?;
+            let metadata = match entry.metadata() {
+                Ok(m) => m,
+                Err(e) => {
+                    eprintln!("Error accessing metadata for {:?}: {}", path, e);
+                    continue;
+                }
+            };
 
             let components: Vec<String> = path
                 .components()
@@ -39,7 +61,7 @@ impl FileExplorer {
             );
 
             if metadata.is_dir() {
-                self.traverse_directory(path)?;
+                let _ = self.traverse_directory(path); // Ignore errors from subdirectories
             }
         }
         Ok(())
